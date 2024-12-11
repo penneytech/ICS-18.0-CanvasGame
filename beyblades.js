@@ -4,6 +4,14 @@ import { canvas } from './canvas.js';
 import { arenaRadius } from './globals.js';
 
 export function updateBeyblade(beyblade) {
+  // Stop movement if angular velocity is too small (within the ±2 range)
+  if (Math.abs(beyblade.angularVelocity) <= 1) {
+    beyblade.velocityX = 0;
+    beyblade.velocityY = 0;
+    beyblade.angularVelocity = 0;
+    return; // Early return, no further updates needed
+  }
+
   beyblade.x += beyblade.velocityX;
   beyblade.y += beyblade.velocityY;
 
@@ -36,6 +44,7 @@ export function updateBeyblade(beyblade) {
   }
 }
 
+
 export function handleCollisions() {
     for (let i = 0; i < beyblades.length; i++) {
       for (let j = i + 1; j < beyblades.length; j++) {
@@ -61,9 +70,12 @@ export function handleCollisions() {
           const b1Tangent = b1.velocityX * tangentX + b1.velocityY * tangentY;
           const b2Tangent = b2.velocityX * tangentX + b2.velocityY * tangentY;
   
-          // Swap normal components for elastic collision
-          const b1NormalAfter = b2Normal * 0.8;  // Apply energy loss factor (coefficient of restitution)
-          const b2NormalAfter = b1Normal * 0.8;  // Apply energy loss factor
+          // Set a coefficient of restitution for energy loss
+          const energyLossFactor = 0.5;  // More energy loss
+  
+          // Swap normal components for collision with energy loss factor
+          const b1NormalAfter = b2Normal * energyLossFactor;
+          const b2NormalAfter = b1Normal * energyLossFactor;
   
           // Update velocities with friction and normal component swap
           b1.velocityX = b1NormalAfter * normalX + b1Tangent * tangentX;
@@ -76,11 +88,12 @@ export function handleCollisions() {
           b1.angularVelocity -= angularTransfer;
           b2.angularVelocity += angularTransfer;
   
-          // Apply friction after collision to slow down the beyblades
-          b1.velocityX *= friction;
-          b1.velocityY *= friction;
-          b2.velocityX *= friction;
-          b2.velocityY *= friction;
+          // Apply additional friction after collision to slow down the beyblades
+          const extraFrictionFactor = 0.9;  // Higher friction after collision
+          b1.velocityX *= friction * extraFrictionFactor;
+          b1.velocityY *= friction * extraFrictionFactor;
+          b2.velocityX *= friction * extraFrictionFactor;
+          b2.velocityY *= friction * extraFrictionFactor;
   
           // Ensure that beyblades don't get stuck with very low velocities
           if (Math.abs(b1.velocityX) < 0.1 && Math.abs(b1.velocityY) < 0.1) {
@@ -102,4 +115,4 @@ export function handleCollisions() {
         }
       }
     }
-  }
+}
