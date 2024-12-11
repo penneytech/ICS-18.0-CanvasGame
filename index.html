@@ -4,20 +4,46 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>replit</title>
+  <title>Beyblade Simulator</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-  
-<Canvas 
-  id="myCanvas" 
-  width=480 
-  height=480
-  style="border: 1px solid #000000; background-color: #cfcfcf;"> 
-</Canvas>
-  
-  
+  <div style="display: flex; gap: 20px;">
+    <canvas
+      id="myCanvas"
+      width="480"
+      height="480"
+      style="border: 1px solid #000000; background-color: #cfcfcf;">
+    </canvas>
+
+    <div>
+      <h3>Beyblade Stats</h3>
+      <table border="1" id="statsTable">
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td>Position (x, y)</td>
+          <td id="position">(400, 250)</td>
+        </tr>
+        <tr>
+          <td>Velocity (vx, vy)</td>
+          <td id="velocity">(0, 10)</td>
+        </tr>
+        <tr>
+          <td>Rotation</td>
+          <td id="rotation">0</td>
+        </tr>
+        <tr>
+          <td>Angular Velocity</td>
+          <td id="angularVelocity">2</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 
