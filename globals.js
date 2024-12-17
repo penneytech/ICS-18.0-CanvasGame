@@ -1,7 +1,6 @@
-// globals.js
 export const arenaRadius = 240;
-export const friction = 0.998;
-export const gravityTowardCenter = 0.005;
+export const friction = 0.995;
+export const gravityTowardCenter = 0.0002;
 
 import { canvas } from "./canvas.js";
 
@@ -40,13 +39,37 @@ function getRandomAngularVelocity(min, max) {
   return velocity;
 }
 
-
 // Function to generate a random RGB color
 function getRandomColor() {
   const r = Math.floor(getRandom(0, 256)); // Random red value (0-255)
   const g = Math.floor(getRandom(0, 256)); // Random green value (0-255)
   const b = Math.floor(getRandom(0, 256)); // Random blue value (0-255)
   return `rgb(${r}, ${g}, ${b})`; // Return color in RGB format
+}
+
+// Lists of prefixes, middle parts, and suffixes for generating names
+const prefixes = [
+  "Blaze", "Storm", "Thunder", "Cyclone", "Inferno", "Aqua", "Vortex", "Shadow",
+  "Titan", "Meteor", "Spark", "Venom", "Razor", "Blizzard", "Crimson", "Phantom", "Galaxy"
+];
+
+const middleParts = [
+  "Fury", "Strike", "Dash", "Surge", "Burst", "Force", "Spin", "Edge", "Power", "Clash",
+  "Blast", "Rage", "Glide", "Shadow", "Wave", "Vibe", "Tornado", "Whirlwind"
+];
+
+const suffixes = [
+  "Nova", "X", "Prime", "Z", "Max", "Force", "Legend", "King", "Beast", "Dragon", "Knight"
+];
+
+// Function to generate a random name by combining parts from each list
+function getRandomName() {
+  const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+  const middle = middleParts[Math.floor(Math.random() * middleParts.length)];
+  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+
+  // Combining the random parts to form a full name
+  return `${prefix} ${middle} ${suffix}`;
 }
 
 // Function to create a random beyblade
@@ -58,17 +81,18 @@ export function createRandomBeyblade() {
   const y = canvas.height / 2 + Math.sin(angle) * distanceFromCenter;
 
   const { velocityX, velocityY } = getRandomVelocity(-10, 10); // Random velocity
-  const angularVelocity = getRandomAngularVelocity(-10, 10); // Random angular velocity
+  const angularVelocity = getRandomAngularVelocity(-15, 15); // Random angular velocity
 
   return {
+    name: getRandomName(), // Assign a random name
     x,
     y,
-    radius: 20,
+    radius: 10,
     velocityX,
     velocityY,
     rotation: 0,
     angularVelocity,
-    angularVelocityFriction: 0.998, // Default angular velocity friction
+    angularVelocityFriction: 0.999, // Default angular velocity friction
     color: getRandomColor(), // Assign a random color
   };
 }
@@ -76,6 +100,15 @@ export function createRandomBeyblade() {
 // Function to create new beyblades
 export function createBeyblades() {
   return [
+    createRandomBeyblade(),
+    createRandomBeyblade(),
+    createRandomBeyblade(),
+    createRandomBeyblade(),
+    createRandomBeyblade(),
+    createRandomBeyblade(),
+    createRandomBeyblade(),
+    createRandomBeyblade(),
+    createRandomBeyblade(),
     createRandomBeyblade(),
     createRandomBeyblade(),
     createRandomBeyblade(),

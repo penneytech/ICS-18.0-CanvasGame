@@ -11,11 +11,19 @@
 <body>
   <div style="display: flex; gap: 20px;">
     <canvas
-      id="myCanvas"
-      width="480"
-      height="480"
-      style="border: 1px solid #000000; background-color: #cfcfcf;">
-    </canvas>
+    id="myCanvas"
+    width="480"
+    height="480"
+    style="border: 1px solid #000000; 
+      background-color: #cfcfcf; 
+      background-image: url('arena.jpg');
+      background-size: 140%; /* Enlarging the image to allow clipping */
+      background-position: center; /* Centering the image */
+      background-clip: content-box; /* Ensures the background is clipped by the canvas' content area */
+    "
+  >
+  </canvas>
+  
 
     <div>
       <h3>Beyblade Stats</h3>

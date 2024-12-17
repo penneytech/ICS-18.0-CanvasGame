@@ -3,6 +3,12 @@ import { beyblades, friction, gravityTowardCenter } from './globals.js';
 import { canvas } from './canvas.js';
 import { arenaRadius } from './globals.js';
 
+// Helper function for random adjustments
+function getRandomAdjustment(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+// beyblades.js
 export function updateBeyblade(beyblade) {
   // Stop movement if angular velocity is too small (within the ±2 range)
   if (Math.abs(beyblade.angularVelocity) <= 1) {
@@ -21,14 +27,26 @@ export function updateBeyblade(beyblade) {
   const dx = beyblade.x - canvas.width / 2;
   const dy = beyblade.y - canvas.height / 2;
   const distanceFromCenter = Math.sqrt(dx * dx + dy * dy);
-
-  const pullX = -gravityTowardCenter * dx;
-  const pullY = -gravityTowardCenter * dy;
+  
+  // Apply an exponential factor to the distance from the center
+  const exponentialFactor = 0.3;  // You can adjust this value to control the exponential growth
+  const exponentialDistance = Math.pow(distanceFromCenter, exponentialFactor);
+  
+  // Calculate the pull force with the exponential distance
+  const pullX = -gravityTowardCenter * dx * exponentialDistance;
+  const pullY = -gravityTowardCenter * dy * exponentialDistance;
+  
+  // Apply the forces to the beyblade's velocity
   beyblade.velocityX += pullX;
   beyblade.velocityY += pullY;
-
+  
   beyblade.velocityX *= friction;
   beyblade.velocityY *= friction;
+
+  // Apply random adjustments to velocity to simulate unpredictable movements
+  const velocityRandomFactor = 0.60; // Adjust how much randomness to introduce
+  beyblade.velocityX += getRandomAdjustment(-velocityRandomFactor, velocityRandomFactor);
+  beyblade.velocityY += getRandomAdjustment(-velocityRandomFactor, velocityRandomFactor);
 
   if (distanceFromCenter + beyblade.radius > arenaRadius) {
     const normalX = dx / distanceFromCenter;
@@ -43,6 +61,7 @@ export function updateBeyblade(beyblade) {
     beyblade.y -= normalY * overlap;
   }
 }
+
 
 
 export function handleCollisions() {
@@ -84,7 +103,7 @@ export function handleCollisions() {
           b2.velocityY = b2NormalAfter * normalY + b2Tangent * tangentY;
   
           // Apply angular velocity transfer with a small energy transfer
-          const angularTransfer = 0.05 * (b1.angularVelocity - b2.angularVelocity);
+          const angularTransfer = 0.5 * (b1.angularVelocity - b2.angularVelocity);
           b1.angularVelocity -= angularTransfer;
           b2.angularVelocity += angularTransfer;
   
